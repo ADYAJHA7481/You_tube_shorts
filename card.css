@@ -29,7 +29,6 @@ body {
   transform: rotateY(180deg);
 }
 
-/* Common Front & Back Styling */
 .card-front,
 .card-back {
   position: absolute;
@@ -52,7 +51,6 @@ body {
   background: #4facfe;
 }
 
-/* Card Back (Improved Layout) */
 .card-back {
   background: linear-gradient(135deg, #00c6ff, #0072ff);
   transform: rotateY(180deg);
@@ -79,7 +77,6 @@ body {
   gap: 20px;
 }
 
-/* QR Section */
 .qr-container {
   display: flex;
   flex-direction: column;
@@ -101,14 +98,13 @@ body {
   color: #fff;
 }
 
-/* Info on Back */
 .back-info {
   text-align: left;
   font-size: 1rem;
   line-height: 1.6;
 }
 
-/* Header on Front */
+
 .header {
   display: flex;
   align-items: center;
