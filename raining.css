@@ -1,0 +1,100 @@
+body {
+  margin: 0;
+  overflow: hidden;
+  height: 100vh;
+  background: linear-gradient(to bottom,
+   #0f2027, #203a43, #2c5364);
+}
+
+.rain {
+  position: absolute;
+  top: -100px;
+  width: 2px;
+  height: 100px;
+  background: rgba(255, 255, 255, 0.2);
+  animation: fall linear infinite;
+}
+
+@keyframes fall {
+  to {
+    transform: translateY(110vh);
+    opacity: 0;
+  }
+}
+
+.landscape {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 40vh;
+  background: linear-gradient(to top, #061a27, #0f2e3d);
+  clip-path: polygon(0 100%, 10% 90%, 25% 95%,
+  40% 80%, 55% 90%, 70% 85%, 90% 95%,
+  100% 90%, 100% 100%);
+  z-index: 2;
+}
+
+.trees {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 20vh;
+  background: url('https://i.imgur.com/GFKZvxK.png') repeat-x;
+  background-size: contain;
+  opacity: 0.6;
+  animation: moveTrees 60s linear infinite;
+  z-index: 3;
+}
+
+@keyframes moveTrees {
+  0% { background-position: 0 100%; }
+  100% { background-position: -1000px 100%; }
+}
+
+.stars {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: transparent;
+  z-index: 0;
+}
+
+.star {
+  position: absolute;
+  width: 2px;
+  height: 2px;
+  background: white;
+  border-radius: 50%;
+  animation: twinkle 2s infinite ease-in-out alternate;
+}
+
+@keyframes twinkle {
+  0% { opacity: 0.3; transform: scale(1); }
+  100% { opacity: 1; transform: scale(1.5); }
+}
+
+.firefly {
+  position: absolute;
+  width: 5px;
+  height: 5px;
+  background: #ffee80;
+  border-radius: 50%;
+  box-shadow: 0 0 10px #ffee80;
+  animation: blink 3s infinite alternate,
+   drift 10s infinite linear;
+  z-index: 4;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 0.2; }
+  50% { opacity: 1; }
+}
+
+@keyframes drift {
+  0% {
+    transform: translate(0, 0);
+  }
+  100% {
+    transform: translate(50px, -30px);
+  }
+}
