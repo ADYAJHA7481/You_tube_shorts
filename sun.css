@@ -1,4 +1,4 @@
-/* style.css */
+
 * {
   margin: 0;
   padding: 0;
@@ -10,22 +10,26 @@ html, body {
   overflow: hidden;
   font-family: 'Segoe UI', sans-serif;
   background: #000;
-}
+} 
 
 .sky {
   position: relative;
   width: 100%;
   height: 100%;
-  background: linear-gradient(to top, #ff9966, #ff5e62, #2b5876);
-  animation: skyTransition 20s ease-in-out infinite alternate;
+  background: linear-gradient(to top,
+   #ff9966, #ff5e62, #2b5876);
+  animation: skyTransition 20s 
+  ease-in-out infinite alternate;
 }
 
 @keyframes skyTransition {
   0% {
-    background: linear-gradient(to top, #ff9966, #ff5e62, #2b5876);
+    background: linear-gradient(to top,
+     #ff9966, #ff5e62, #2b5876);
   }
   100% {
-    background: linear-gradient(to top, #0d1b2a, #1b263b, #415a77);
+    background: linear-gradient(to top,
+     #0d1b2a, #1b263b, #415a77);
   }
 }
 
@@ -65,9 +69,11 @@ html, body {
 }
 
 @keyframes moonrise {
-  0% { opacity: 0; transform: translate(-50%, -50%) scale(0.8); }
+  0% { opacity: 0; transform: 
+    translate(-50%, -50%) scale(0.8); }
   50% { opacity: 0.3; }
-  100% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+  100% { opacity: 1; transform:
+     translate(-50%, -50%) scale(1); }
 }
 
 .stars, .shooting-stars {
@@ -99,7 +105,8 @@ html, body {
 .shooting-star {
   width: 100px;
   height: 2px;
-  background: linear-gradient(to right, white, transparent);
+  background: linear-gradient(to right,
+   white, transparent);
   animation: shoot 3s ease-in-out forwards;
 }
 
@@ -114,14 +121,18 @@ html, body {
   width: 100%;
   height: 40%;
   background: #4a2f2f;
-  clip-path: polygon(0 100%, 20% 40%, 40% 100%, 60% 50%, 80% 100%, 100% 60%, 100% 100%);
+  clip-path: polygon(0 100%, 20% 40%, 
+  40% 100%, 60% 50%, 80% 100%, 
+  100% 60%, 100% 100%);
   z-index: 3;
 }
 
 .mountain.second {
   background: #5e3f3f;
   height: 50%;
-  clip-path: polygon(0 100%, 15% 50%, 35% 90%, 55% 40%, 75% 95%, 100% 55%, 100% 100%);
+  clip-path: polygon(0 100%, 
+  15% 50%, 35% 90%, 55% 40%, 
+  75% 95%, 100% 55%, 100% 100%);
   z-index: 2;
 }
 
@@ -132,7 +143,8 @@ html, body {
   background: transparent;
   border-top: 2px solid white;
   border-radius: 50%;
-  animation: fly 15s linear infinite alternate;
+  animation: fly 15s linear
+   infinite alternate;
   z-index: 5;
 }
 
@@ -147,9 +159,11 @@ html, body {
 }
 
 @keyframes fly {
-  0% { left: -60px; top: 100px; transform: scale(1); }
+  0% { left: -60px; top: 100px; 
+    transform: scale(1); }
   50% { top: 80px; }
-  100% { left: 110%; top: 120px; transform: scale(0.8); }
+  100% { left: 110%; top: 120px;
+     transform: scale(0.8); }
 }
 
 .text {

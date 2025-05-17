@@ -9,7 +9,7 @@ for (let i = 0; i < 100; i++) {
   starsContainer.appendChild(star);
 }
 
-// Clock update
+// Clock update 
 const clockElem = document.getElementById("clock");
 function updateClock() {
   const now = new Date();
