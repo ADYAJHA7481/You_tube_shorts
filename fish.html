@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Water Animation By Aarushi</title>
+  <style>
+    body, html {
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      height: 100vh;
+      width: 100vw;
+      font-family: sans-serif;
+      background: linear-gradient(to top, #0a1f44 0%, #3b82f6 50%, #a7f3d0 100%);
+      transition: background 2s;
+    }
+
+    body.night {
+      background: linear-gradient(to top, #000428 0%, #004e92 60%, #6dd5fa 100%);
+    }
+
+    #toggle {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      z-index: 100;
+      background: #fff;
+      padding: 6px 12px;
+      border: none;
+      border-radius: 6px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    #water-dome {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 140px;
+      background: radial-gradient(ellipse at center, #60d5f8 30%, #1e90ff 90%);
+      border-top-left-radius: 50% 100%;
+      border-top-right-radius: 50% 100%;
+      box-shadow: inset 0 10px 30px rgba(255, 255, 255, 0.3);
+      border-top: 4px solid #80e9ff;
+      z-index: 1;
+      transition: background 2s;
+    }
+
+    body.night #water-dome {
+      background: radial-gradient(ellipse at center, #0f2c50 20%, #003366 90%);
+    }
+
+    #base-stripes {
+      position: absolute;
+      bottom: 0;
+      width: 100%;
+      height: 30px;
+      background: repeating-linear-gradient(
+        45deg,
+        rgba(255, 255, 255, 0.2),
+        rgba(255, 255, 255, 0.2) 10px,
+        transparent 10px,
+        transparent 20px
+      );
+      backdrop-filter: blur(2px);
+      z-index: 2;
+    }
+
+    .dragonfly {
+      position: absolute;
+      width: 35px;
+      height: 12px;
+      background: linear-gradient(90deg, #90caf9 40%, #42a5f5 70%);
+      border-radius: 12px;
+      filter: drop-shadow(0 0 5px #42a5f5);
+      transform-origin: center center;
+      pointer-events: none;
+      z-index: 4;
+    }
+    .dragonfly::before, .dragonfly::after {
+      content: '';
+      position: absolute;
+      width: 18px;
+      height: 8px;
+      background: rgba(255, 255, 255, 0.75);
+      border-radius: 50% / 100%;
+      top: 2px;
+    }
+    .dragonfly::before {
+      left: -14px;
+      transform: rotate(20deg);
+    }
+    .dragonfly::after {
+      right: -14px;
+      transform: rotate(-20deg);
+    }
+
+    .frog {
+      position: absolute;
+      width: 15px;
+      height: 15px;
+      background: radial-gradient(circle, #4caf50, #2e7d32);
+      border-radius: 50%;
+      z-index: 5;
+      animation: hop 3s infinite ease-in-out alternate;
+    }
+
+    @keyframes hop {
+      0% { transform: translateY(0); }
+      100% { transform: translateY(-10px); }
+    }
+
+    .fish {
+      position: absolute;
+      width: 20px;
+      height: 12px;
+      background: orange;
+      border-radius: 10px 10px 10px 0;
+      z-index: 3;
+      animation: swim 10s infinite linear;
+    }
+
+    .fish::before {
+      content: '';
+      position: absolute;
+      right: -6px;
+      top: 2px;
+      width: 0;
+      height: 0;
+      border-top: 5px solid transparent;
+      border-bottom: 5px solid transparent;
+      border-left: 6px solid orange;
+    }
+
+    @keyframes swim {
+      0% { left: -30px; top: calc(100% - 160px); }
+      100% { left: 100vw; top: calc(100% - 160px); }
+    }
+
+    .bubble {
+      position: absolute;
+      bottom: 20px;
+      left: 50%;
+      width: 12px;
+      height: 12px;
+      background: rgba(255, 255, 255, 0.5);
+      border-radius: 50%;
+      animation: rise 5s linear infinite;
+      z-index: 0;
+    }
+
+    @keyframes rise {
+      0% { transform: translate(-50%, 0) scale(1); opacity: 0.5; }
+      50% { opacity: 1; }
+      100% { transform: translate(-50%, -250px) scale(0.5); opacity: 0; }
+    }
+
+    .star {
+      position: absolute;
+      background: white;
+      border-radius: 50%;
+      width: 2px;
+      height: 2px;
+      opacity: 0.8;
+      z-index: 0;
+    }
+
+    .lightning {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background: white;
+      top: 0;
+      left: 0;
+      opacity: 0;
+      z-index: 99;
+      pointer-events: none;
+      transition: opacity 0.2s;
+    }
+
+    .bird {
+      position: absolute;
+      width: 25px;
+      height: 10px;
+      background: black;
+      border-radius: 50% 50% 0 0;
+      transform: rotate(10deg);
+      animation: flyBird 12s linear infinite;
+      z-index: 4;
+    }
+
+    .bird::before {
+      content: '';
+      position: absolute;
+      width: 25px;
+      height: 10px;
+      background: black;
+      border-radius: 50% 50% 0 0;
+      transform: rotate(-20deg);
+      top: -5px;
+      left: -10px;
+    }
+
+    @keyframes flyBird {
+      0% { left: -30px; top: 50px; }
+      100% { left: 100vw; top: 30px; }
+    }
+
+    .leaf {
+      position: absolute;
+      width: 20px;
+      height: 10px;
+      background: linear-gradient(to right, #4caf50, #81c784);
+      border-radius: 50%;
+      opacity: 0.8;
+      animation: floatLeaf 10s linear infinite;
+      z-index: 3;
+    }
+
+    @keyframes floatLeaf {
+      0% { transform: translateY(0) rotate(0deg); }
+      50% { transform: translateY(-50px) rotate(180deg); }
+      100% { transform: translateY(0) rotate(360deg); }
+    }
+  </style>
+</head>
+<body>
+
+<button id="toggle">Toggle Day/Night</button>
+<div id="water-dome"></div>
+<div id="base-stripes"></div>
+<div class="lightning"></div>
+
+<script>
+  const NUM_DRAGONFLIES = 10;
+  const NUM_FISH = 5;
+  const dragonflies = [];
+
+  // Dragonflies
+  for (let i = 0; i < NUM_DRAGONFLIES; i++) {
+    const df = document.createElement('div');
+    df.classList.add('dragonfly');
+    document.body.appendChild(df);
+
+    const x = Math.random() * window.innerWidth;
+    const y = Math.random() * (window.innerHeight - 200);
+    const vx = (Math.random() * 3) - 1.5;
+    const vy = (Math.random() * 3) - 1.5;
+
+    dragonflies.push({ el: df, x, y, vx, vy });
+  }
+
+  // Frogs
+  for (let i = 0; i < 8; i++) {
+    const frog = document.createElement('div');
+    frog.classList.add('frog');
+    frog.style.left = `${Math.random() * (window.innerWidth - 50)}px`;
+    frog.style.bottom = `${Math.random() * 100}px`;
+    document.body.appendChild(frog);
+  }
+
+  // Fish
+  for (let i = 0; i < NUM_FISH; i++) {
+    const fish = document.createElement('div');
+    fish.classList.add('fish');
+    fish.style.top = `${140 + Math.random() * 20}px`;
+    fish.style.animationDuration = `${6 + Math.random() * 6}s`;
+    fish.style.animationDelay = `${Math.random() * 5}s`;
+    document.body.appendChild(fish);
+  }
+
+  // Bubbles
+  function createBubble() {
+    const bubble = document.createElement('div');
+    bubble.classList.add('bubble');
+    bubble.style.left = Math.random() * window.innerWidth + 'px';
+    document.body.appendChild(bubble);
+    setTimeout(() => bubble.remove(), 5000);
+  }
+  setInterval(createBubble, 400);
+
+  // Dragonflies animation
+  function updateDragonflies() {
+    const width = window.innerWidth;
+    const height = window.innerHeight;
+
+    dragonflies.forEach(df => {
+      if (Math.random() < 0.03) {
+        const angleChange = (Math.random() * 40 - 20) * Math.PI / 180;
+        const speed = Math.sqrt(df.vx * df.vx + df.vy * df.vy);
+        let currentAngle = Math.atan2(df.vy, df.vx);
+        currentAngle += angleChange;
+        df.vx = speed * Math.cos(currentAngle);
+        df.vy = speed * Math.sin(currentAngle);
+      }
+
+      df.x += df.vx;
+      df.y += df.vy;
+
+      if (df.x < 0) { df.x = 0; df.vx = Math.abs(df.vx); }
+      else if (df.x > width) { df.x = width; df.vx = -Math.abs(df.vx); }
+      if (df.y < 0) { df.y = 0; df.vy = Math.abs(df.vy); }
+      else if (df.y > height - 180) { df.y = height - 180; df.vy = -Math.abs(df.vy); }
+
+      const rotation = Math.atan2(df.vy, df.vx) * 180 / Math.PI;
+      df.el.style.left = df.x + 'px';
+      df.el.style.top = df.y + 'px';
+      df.el.style.transform = `rotate(${rotation}deg)`;
+    });
+
+    requestAnimationFrame(updateDragonflies);
+  }
+
+  // Birds
+  function createBirds() {
+    for (let i = 0; i < 3; i++) {
+      const bird = document.createElement('div');
+      bird.classList.add('bird');
+      bird.style.top = `${30 + Math.random() * 100}px`;
+      bird.style.animationDelay = `${Math.random() * 5}s`;
+      document.body.appendChild(bird);
+    }
+  }
+
+  // Leaves
+  function createLeaves() {
+    for (let i = 0; i < 8; i++) {
+      const leaf = document.createElement('div');
+      leaf.classList.add('leaf');
+      leaf.style.left = `${Math.random() * window.innerWidth}px`;
+      leaf.style.top = `${Math.random() * window.innerHeight * 0.5}px`;
+      leaf.style.animationDuration = `${6 + Math.random() * 5}s`;
+      leaf.style.animationDelay = `${Math.random() * 3}s`;
+      document.body.appendChild(leaf);
+    }
+  }
+
+  // Stars
+  function generateStars() {
+    for (let i = 0; i < 80; i++) {
+      const star = document.createElement('div');
+      star.classList.add('star');
+      star.style.left = Math.random() * window.innerWidth + 'px';
+      star.style.top = Math.random() * window.innerHeight * 0.5 + 'px';
+      star.style.width = star.style.height = Math.random() < 0.5 ? '1px' : '2px';
+      star.style.opacity = Math.random();
+      document.body.appendChild(star);
+    }
+  }
+
+  // Lightning
+  const lightningFlash = document.querySelector('.lightning');
+  function simulateLightning() {
+    if (!document.body.classList.contains('night')) return;
+    if (Math.random() < 0.01) {
+      lightningFlash.style.opacity = 0.8;
+      setTimeout(() => {
+        lightningFlash.style.opacity = 0;
+      }, 200);
+    }
+    setTimeout(simulateLightning, 300);
+  }
+
+  // Toggle Day/Night
+  const toggleBtn = document.getElementById('toggle');
+  toggleBtn.addEventListener('click', () => {
+    document.body.classList.toggle('night');
+    if (document.body.classList.contains('night')) {
+      generateStars();
+      simulateLightning();
+    } else {
+      document.querySelectorAll('.star').forEach(el => el.remove());
+    }
+  });
+
+  createBirds();
+  createLeaves();
+  requestAnimationFrame(updateDragonflies);
+</script>
+
+</body>
+</html>
