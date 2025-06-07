@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Flower Animation By Aarushi</title>
+  <style>
+    body {
+      margin: 0;
+      overflow: hidden;
+      background: linear-gradient(to top, #123c52, #1e5c74, #2a788d);
+    }
+    canvas {
+      display: block;
+    }
+  </style>
+</head>
+<body>
+<canvas id="canvas"></canvas>
+<script>
+const canvas = document.getElementById("canvas");
+const ctx = canvas.getContext("2d");
+
+let W, H;
+function resize() {
+  W = canvas.width = window.innerWidth;
+  H = canvas.height = window.innerHeight;
+}
+window.addEventListener('resize', resize);
+resize();
+
+const leafColors = ["#ff6f61", "#ffb347", "#88d498", "#66d3fa", "#fce38a"];
+const flowerColors = ["#ff99cc", "#ba68c8", "#40e0d0", "#a8e6cf", "#ffcc80"];
+
+let leaves = [], flowers = [], birds = [], fog = [];
+
+function createLeaf() {
+  return {
+    x: Math.random() * W,
+    y: -20,
+    size: 12 + Math.random() * 10,
+    speedY: 0.5 + Math.random() * 0.5,
+    speedX: Math.random() * 0.8 - 0.4,
+    angle: Math.random() * Math.PI * 2,
+    rotationSpeed: (Math.random() - 0.5) * 0.02,
+    color: leafColors[Math.floor(Math.random() * leafColors.length)]
+  };
+}
+
+function drawLeaf(leaf) {
+  ctx.save();
+  ctx.translate(leaf.x, leaf.y);
+  ctx.rotate(leaf.angle);
+  ctx.fillStyle = leaf.color;
+  ctx.beginPath();
+  ctx.moveTo(0, 0);
+  ctx.bezierCurveTo(-leaf.size * 0.2, -leaf.size * 0.5, -leaf.size, -leaf.size * 0.2, -leaf.size * 0.2, leaf.size * 0.1);
+  ctx.bezierCurveTo(-leaf.size * 0.5, leaf.size * 0.6, 0, leaf.size, leaf.size * 0.2, leaf.size * 0.1);
+  ctx.bezierCurveTo(leaf.size, -leaf.size * 0.2, leaf.size * 0.2, -leaf.size * 0.5, 0, 0);
+  ctx.closePath();
+  ctx.fill();
+  ctx.restore();
+}
+
+function initFlowers() {
+  flowers = [];
+  for (let i = 0; i < 50; i++) {
+    let maxRadius = 6 + Math.random() * 8;
+    flowers.push({
+      x: Math.random() * W,
+      y: H - Math.random() * 120,
+      radius: maxRadius,
+      maxRadius: maxRadius,
+      color: flowerColors[Math.floor(Math.random() * flowerColors.length)],
+      swayOffset: Math.random() * 1000
+    });
+  }
+}
+
+function drawStem(x, y) {
+  ctx.beginPath();
+  ctx.strokeStyle = "#66bb6a";
+  ctx.lineWidth = 2;
+  ctx.moveTo(x, H);
+  ctx.lineTo(x, y);
+  ctx.stroke();
+}
+
+function drawFlower(f, time) {
+  drawStem(f.x, f.y);
+  const sway = Math.sin(time / 500 + f.swayOffset) * 5;
+  ctx.save();
+  ctx.translate(f.x + sway, f.y);
+  ctx.fillStyle = f.color;
+  for (let i = 0; i < 6; i++) {
+    ctx.beginPath();
+    ctx.rotate(Math.PI / 3);
+    ctx.arc(0, 0, f.radius, 0, Math.PI / 2);
+    ctx.fill();
+  }
+  ctx.beginPath();
+  ctx.fillStyle = "#fff9c4";
+  ctx.arc(0, 0, f.radius / 2, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.restore();
+}
+
+function createBird() {
+  return {
+    x: Math.random() * W,
+    y: Math.random() * H * 0.3,
+    speed: 0.5 + Math.random(),
+    size: 8 + Math.random() * 4
+  };
+}
+
+function drawBird(bird) {
+  ctx.beginPath();
+  ctx.moveTo(bird.x, bird.y);
+  ctx.lineTo(bird.x - bird.size, bird.y - bird.size / 2);
+  ctx.lineTo(bird.x - bird.size * 2, bird.y);
+  ctx.strokeStyle = "#fff";
+  ctx.lineWidth = 2;
+  ctx.stroke();
+}
+
+function createFog() {
+  return {
+    x: Math.random() * W,
+    y: Math.random() * H * 0.5,
+    radius: 100 + Math.random() * 100,
+    alpha: 0.02 + Math.random() * 0.03
+  };
+}
+
+function drawFog(f) {
+  ctx.beginPath();
+  ctx.arc(f.x, f.y, f.radius, 0, Math.PI * 2);
+  ctx.fillStyle = `rgba(255,255,255,${f.alpha})`;
+  ctx.fill();
+}
+
+initFlowers();
+for (let i = 0; i < 10; i++) birds.push(createBird());
+for (let i = 0; i < 8; i++) fog.push(createFog());
+
+function animate(time) {
+  ctx.clearRect(0, 0, W, H);
+
+  // Fog
+  fog.forEach(drawFog);
+
+  // Birds
+  birds.forEach(b => {
+    drawBird(b);
+    b.x += b.speed;
+    if (b.x > W + 20) b.x = -40;
+  });
+
+  // Leaves
+  if (Math.random() < 0.3 && leaves.length < 50) leaves.push(createLeaf());
+  for (let i = leaves.length - 1; i >= 0; i--) {
+    const leaf = leaves[i];
+    leaf.y += leaf.speedY;
+    leaf.x += leaf.speedX + Math.sin(leaf.angle) * 0.3;
+    leaf.angle += leaf.rotationSpeed;
+    drawLeaf(leaf);
+    if (leaf.y > H * 0.6) leaves.splice(i, 1);
+  }
+
+  // Flowers
+  flowers.forEach(f => drawFlower(f, time));
+
+  requestAnimationFrame(animate);
+}
+
+animate();
+</script>
+</body>
+</html>
